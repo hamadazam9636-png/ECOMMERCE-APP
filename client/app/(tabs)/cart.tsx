@@ -69,7 +69,7 @@ export default function Cart() {
         </>
        ) : (
          <View className='flex-1 items-center justify-center'>
-            <Text className='text-secondary text-lg'>Your
+            <Text className='text-secondary text-[16px]'>Your
               cart is empty</Text>
             <TouchableOpacity onPress={()=>router.push('/')}
              className='mt-4'>
