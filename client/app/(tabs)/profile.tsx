@@ -1,18 +1,20 @@
 import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native'
 import React from 'react'
-import { dummyUser } from '@/assets/assets'
+// import { dummyUser } from '@/assets/assets'
 import { useRouter } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Header from '@/components/Header'
 import { Ionicons } from '@expo/vector-icons'
 import { COLORS, PROFILE_MENU } from '@/constants'
+import { useClerk } from '@clerk/clerk-expo'
 
 export default function Profile() {
 
- const user = {user: dummyUser}
+ const {user, signOut} = useClerk()
  const router = useRouter()
 
 const handleLogout = async () => {
+  await signOut();
   router.replace("/sign-in")
 }
 
@@ -53,19 +55,19 @@ const handleLogout = async () => {
             <View className='items-center mb-8'>
             
               <View className='mb-3'>
-                <Image source={{uri: user.user.imageUrl}}
+                <Image source={{uri: user.imageUrl}}
                 className='size-20 border-2 border-white
                 shadow-sm rounded-full'/>
               </View>
             
             <Text className='text-xl font-bold
-            text-primary'>{user.user.firstName + " " + 
-            user.user.lastName}</Text>
+            text-primary'>{user.firstName + " " + 
+            user.lastName}</Text>
             <Text className='text-secondary text-sm'>
-            {user.user.emailAddresses[0].emailAddress}</Text>
+            {user.emailAddresses[0].emailAddress}</Text>
             
             {/* Admin Panel button if user is admin */}
-             {user.user.publicMetadata?.role === 'admin' && (
+             {user.publicMetadata?.role === 'admin' && (
                <TouchableOpacity onPress={()=>router.push('/admin')}
                className='mt-4 bg-primary px-6 py-2 rounded-full'>
                 <Text className='text-white font-bold
