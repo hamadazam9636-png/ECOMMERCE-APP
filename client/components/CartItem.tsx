@@ -26,7 +26,10 @@ export default function CartItem({item, onRemove,
             <Text className='text-secondary 
             text-xs'>Size: {item.size}</Text>
            </View>
-        <TouchableOpacity onPress={onRemove}>
+        <TouchableOpacity accessibilityRole='button'
+            accessibilityLabel={`Remove ${item.product.name} from cart`}
+           onPress={onRemove}>
+            
             <Ionicons name='close-circle-outline' 
             size={20} color="#FF4C3B"/>
         </TouchableOpacity>
@@ -40,9 +43,16 @@ export default function CartItem({item, onRemove,
 
             <View className='flex-row items-center 
             bg-gray-100 rounded-full px-2 py-1'>
-                 <TouchableOpacity className='p-1'
-                 onPress={()=>onUpdateQuantity && 
-                    onUpdateQuantity(item.quantity - 1)}>
+                 <TouchableOpacity
+                 className='p-1'
+                 onPress={() => {
+                    if (!onUpdateQuantity) return;
+                    if (item.quantity <= 1) {
+                      onRemove?.();
+                      return;
+                    }
+                    onUpdateQuantity(item.quantity - 1);
+                 }}>
                     <Ionicons name='remove' size={16}
                     color={COLORS.primary}/>
                  </TouchableOpacity>
@@ -51,7 +61,9 @@ export default function CartItem({item, onRemove,
                  mx-3'>{item.quantity}</Text>
 
 
-                <TouchableOpacity className='p-1'
+                <TouchableOpacity accessibilityRole='button'
+                 accessibilityLabel={`Increase quantity of ${item.product.name}`}
+                className='p-1'
                  onPress={()=>onUpdateQuantity && 
                     onUpdateQuantity(item.quantity + 1)}>
                     <Ionicons name='add' size={16}

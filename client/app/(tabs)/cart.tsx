@@ -27,9 +27,16 @@ export default function Cart() {
           {cartItems.map((item, index) =>(
            <CartItem key={index}
            item={item}
-           onRemove={()=> removeFromCart(item.id, item.size)}
-           onUpdateQuantity={(q)=>updateQuantity(item.id, q, 
-            item.size)}/>
+           onRemove={() => {
+             void removeFromCart(item.id, item.size).catch((error) => {
+               console.error('Failed to remove cart item', error);
+              });
+            }}
+           onUpdateQuantity={(q) => {
+             void updateQuantity(item.id, q, item.size).catch((error) => {
+               console.error('Failed to update cart quantity', error);
+             });
+           }}/>
          ))}
         </ScrollView>
 
