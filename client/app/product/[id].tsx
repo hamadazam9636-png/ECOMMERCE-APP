@@ -24,17 +24,18 @@ export default function ProductDetails({route}: any) {
 
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
   
-  const [activeImageIndex, setActiveImageIndex] = useState(0)
-  
- const fetchProduct = async () => {
-        const found: any = dummyProducts.find((p) => p._id === id);
-        setProduct(found ?? null);
-        setLoading(false)
-    }
+const [activeImageIndex, setActiveImageIndex] = useState(0)
 
-    useEffect(()=>{
-       fetchProduct()
-    }, [id])
+  useEffect(()=>{
+    const fetchProduct = async () => {
+      const found: any = dummyProducts.find((p) => p._id === id);
+      setProduct(found ?? null);
+      setLoading(false)
+    }
+    setSelectedSize(null)
+    setActiveImageIndex(0)
+    fetchProduct()
+  },  [id])
 
     if(loading){
       return (

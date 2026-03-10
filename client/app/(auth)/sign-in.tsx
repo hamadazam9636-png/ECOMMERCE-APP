@@ -10,7 +10,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function Page() {
     const { signIn, setActive, isLoaded } = useSignIn();
     const router = useRouter();
-
+    
+    const [error, setError] = React.useState("");
     const [emailAddress, setEmailAddress] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [code, setCode] = React.useState("");
@@ -23,6 +24,7 @@ export default function Page() {
         if (!emailAddress || !password) return;
 
         setLoading(true);
+        setError("");
 
         try {
 
@@ -48,7 +50,13 @@ export default function Page() {
                 }
             }
         } catch (err) {
-            console.error(err);
+             console.error(err);
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Sign in failed. Please try again.");
+           }
+  
         } finally {
             setLoading(false);
         }

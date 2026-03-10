@@ -1,5 +1,5 @@
 import { View, Text, TextInput, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native'
-import React, { use, useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Product } from '@/constants/types'
 import { dummyProducts } from '@/assets/assets'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -15,9 +15,12 @@ const [loading, setLoading] = useState(true)
 const [loadingMore, setLoadingMore] = useState(false)
 const [page, setPage] = useState(1)
 const [hasMore, setHasMore] = useState(true)
+const pagingInFlightRef = useRef(false)
 
 const fetchProducts = async (pageNumber = 1) => {
-      if(pageNumber === 1){
+  if (pageNumber > 1 && pagingInFlightRef.current) return
+  if (pageNumber > 1) pagingInFlightRef.current = true    
+  if(pageNumber === 1){
         setLoading(true)
       }else{
         setLoadingMore(true)
@@ -38,6 +41,7 @@ const fetchProducts = async (pageNumber = 1) => {
       } catch (error) {
         console.error("Pagination error:", error)
       } finally{
+         pagingInFlightRef.current = false
           setLoading(false)
           setLoadingMore(false)
       }
